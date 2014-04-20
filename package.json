@@ -16,7 +16,8 @@
     "url": "https://github.com/hubot-scripts/hubot-wakeup/issues"
   },
   "dependencies": {
-    "coffee-script": "~1.6"
+    "coffee-script": "~1.6",
+    "wake_on_lan": "0.0.3"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -28,8 +29,7 @@
     "hubot-mock-adapter": "~1.0.0",
     "jasmine-node": "~1.14.3",
     "load-grunt-tasks": "~0.4.0",
-    "matchdep": "~0.1.2",
-    "wake_on_lan": "0.0.3"
+    "matchdep": "~0.1.2"
   },
   "main": "index.coffee",
   "scripts": {
