@@ -2,29 +2,32 @@
 
 module.exports = function(grunt) {
 
-  grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.loadNpmTasks('grunt-release');
+  require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
-    mochaTest: {
-      test: {
-        options: {
-          reporter: 'spec',
-          require: 'coffee-script'
-        },
-        src: ['test/**/*.coffee']
-      }
-    },
-    release: {
+    bump: {
       options: {
-        tagName: 'v<%= version %>',
-        commitMessage: 'Prepared to release <%= version %>.'
+        commit: true,
+        commitMessage: 'Release v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: false
       }
     },
     watch: {
-      files: ['Gruntfile.js', 'test/**/*.coffee'],
+      files: ['Gruntfile.js', 'test/**/*.coffee', 'src/**/*.coffee'],
       tasks: ['test']
-    }
+    },
+    jasmine_node: {
+        options: {
+          forceExit: true,
+          match: '.',
+          matchall: false,
+          extensions: 'coffee',
+          specNameMatcher: 'spec',
+          coffee: true,
+        },
+        all: ['test/']
+      }
   });
 
   grunt.event.on('watch', function(action, filepath, target) {
@@ -34,7 +37,7 @@ module.exports = function(grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('test:watch', ['watch']);
   grunt.registerTask('default', ['test']);
 };
