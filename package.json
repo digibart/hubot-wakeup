@@ -1,7 +1,7 @@
 {
   "name": "hubot-wakeup",
   "description": "A hubot script that kicks by sending WOL packages",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Bart <bart@pixelbak.nl>",
   "license": "MIT",
   "keywords": [
