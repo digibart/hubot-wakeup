@@ -1,24 +1,26 @@
 # hubot-wakeup
 
+[![build status](http://gitlab-ci.pixelbak.nl/projects/19/status.png?ref=master)](http://gitlab-ci.pixelbak.nl/projects/19?ref=master)
+
 A hubot script that kicks bare metal machines by sending WOL packages
 
 See [`src/wakeup.coffee`](src/wakeup.coffee) for full documentation.
 
 ## Installation
 
-In hubot project repo, run:
+1. In hubot project repo, run:
 
-`npm install git+ssh://git@gitlab.pixelbak.nl:npm/hubot-wakeup.git --save`
+	`npm install git+ssh://git@gitlab.pixelbak.nl:npm/hubot-wakeup.git --save`
+	
+	or if you don't have GIT access:
+	
+	`npm install https://gitlab.pixelbak.nl/npm/hubot-wakeup/repository/archive.tar.gz?ref=master --save`
 
-or if you don't have GIT access:
+2. Then add **hubot-wakeup** to your `external-scripts.json`:
 
-`npm install https://gitlab.pixelbak.nl/npm/hubot-wakeup/repository/archive.tar.gz?ref=master --save`
-
-Then add **hubot-wakeup** to your `external-scripts.json`:
-
-```json
-["hubot-wakeup"]
-```
+	```json
+	["hubot-wakeup"]
+	```
 
 ## Sample Interaction
 
