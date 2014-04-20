@@ -5,10 +5,10 @@
 #   None
 #
 # Commands:
-#   hubot kick <machine> - Send a WOL package to <machine> 
-#   hubot machine <name> has mac <mac> - store <mac> for machine <name>
+#   hubot kick <machine> - Send a WOL package to `<machine>`
+#   hubot machine <name> has mac <mac> - store `<mac>` for machine `<name>`
 #   hubot forget machine <name> - remove a machine from memory
-#   hubot show me machine list - returns a list of machines with their mac adres
+#   hubot show machines - returns a list of machines with their mac adres
 #
 # Notes:
 #   None
@@ -55,15 +55,15 @@ module.exports = (robot) ->
   #
   # Show a list of all machines I know
   # 
-  robot.respond /show (?:the )?machine list/i, (msg) ->
+  robot.respond /show (?:the )?machine list|show machines/i, (msg) ->
     machineList = robot.brain.get('wakeup') or null
 
-    machineReply = null
+    machineReply = ""
 
     if machineList == null
       msg.reply "I don't know any machines... (hint: hubot machine <name> has mac <mac>)"
     else 
-      machineReply = "#{machineReply}\n #{mac} | #{machine}" for machine, mac of machineList
+      machineReply = "#{machineReply}\n `#{mac}` | #{machine}" for machine, mac of machineList
       
       msg.reply machineReply
 
