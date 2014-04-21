@@ -5,12 +5,11 @@ module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
 
   grunt.initConfig({
-    bump: {
+    release: {
       options: {
-        commit: true,
-        commitMessage: 'Release v%VERSION%',
-        tagMessage: 'Version %VERSION%',
-        push: false
+        tagName: 'v<%= version %>',
+        tagMessage: 'Version <%= version %>',
+        commitMessage: 'Release v<%= version %>.'
       }
     },
     watch: {

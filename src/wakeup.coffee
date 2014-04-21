@@ -14,7 +14,7 @@
 #   None
 #
 # Author:
-#   Bart@Pixel Bakkerij
+#   PixelBakkerij
 
 module.exports = (robot) ->
 
