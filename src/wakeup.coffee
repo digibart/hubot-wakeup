@@ -24,7 +24,7 @@ module.exports = (robot) ->
 	# Check if <mac> is a valid mac address
 	# 
 	isValidMac = (mac) ->
-		return sanitizeMac(mac).match /([a-f0-9: -]{12,})/i
+		return Boolean sanitizeMac(mac).match /([a-f0-9: -]{12,})/i
 
 
 	#
@@ -34,6 +34,30 @@ module.exports = (robot) ->
 		return mac.replace /([ -.])/g, ":"
 
 
+	#
+	# Send the package
+	#
+	wakeup = (machine, msg) ->
+		machineList = robot.brain.get('wakeup') or null
+		msg = msg or reply : ->
+
+		# Is it a machine we know?
+		if machineList? && machineList[machine]?
+			mac = machineList[machine]
+		else
+			mac = machine
+
+		if isValidMac mac
+
+			# This is the magical line, that sends the packages
+			wol.wake mac, (error) ->
+				if error
+					msg.reply "shoot! #{error}"
+				else
+					msg.reply "kicked #{mac} his shiny metal ass"
+		else
+			msg.reply "#{mac} is not a mac adres, nor a machine I know"
+			return
 	#
 	# Remember a machine's mac address
 	# 
@@ -87,24 +111,5 @@ module.exports = (robot) ->
 	# Send a WOL package
 	# 
 	robot.respond /kick (.*)/i, (msg) ->
-		machineList = robot.brain.get('wakeup') or null
-
-		# Is it a machine we know?
-		if machineList? && machineList[msg.match[1]]?
-			mac = machineList[msg.match[1]]
-		else 
-			mac = msg.match[1]
-
-		if isValidMac mac
-
-			# This is the magical line, that sends the packages
-			wol.wake mac, (error) ->
-				if error
-					msg.reply "shoot! #{error}"
-				else 
-					msg.reply "kicked #{mac} his shiny metal ass"
-		else
-			msg.reply "#{mac} is not a mac adres, nor a machine I know"
-			return
-
+		wakeup msg.match[1], msg
 
