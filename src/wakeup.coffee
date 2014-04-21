@@ -18,93 +18,93 @@
 
 module.exports = (robot) ->
 
-  wol = require 'wake_on_lan'
+	wol = require 'wake_on_lan'
 
-  #
-  # Check if <mac> is a valid mac address
-  # 
-  isValidMac = (mac) ->
-    return sanitizeMac(mac).match /([a-f0-9: -]{12,})/i
-
-
-  #
-  # Replace ` `, `-` and `.` with a semicon
-  # 
-  sanitizeMac = (mac) ->
-    return mac.replace /([ -.])/g, ":"
+	#
+	# Check if <mac> is a valid mac address
+	# 
+	isValidMac = (mac) ->
+		return sanitizeMac(mac).match /([a-f0-9: -]{12,})/i
 
 
-  #
-  # Remember a machine's mac address
-  # 
-  robot.respond /machine (.*) has mac (.*)/i, (msg) ->
-    machineList = robot.brain.get('wakeup') or {}
-
-    machine = msg.match[1]
-    mac = sanitizeMac msg.match[2]
-
-    if isValidMac mac
-      machineList[machine] = mac
-      robot.brain.set "wakeup", machineList
-
-      msg.reply "got it, #{machine} has mac address #{mac}"
-    else
-      msg.reply "hmzz.. #{mac} is not a valid mac address"
+	#
+	# Replace ` `, `-` and `.` with a semicon
+	# 
+	sanitizeMac = (mac) ->
+		return mac.replace /([ -.])/g, ":"
 
 
-  #
-  # Show a list of all machines I know
-  # 
-  robot.respond /show (?:the )?machine list|show machines/i, (msg) ->
-    machineList = robot.brain.get('wakeup') or null
+	#
+	# Remember a machine's mac address
+	# 
+	robot.respond /machine (.*) has mac (.*)/i, (msg) ->
+		machineList = robot.brain.get('wakeup') or {}
 
-    machineReply = ""
+		machine = msg.match[1]
+		mac = sanitizeMac msg.match[2]
 
-    if machineList == null
-      msg.reply "I don't know any machines... (hint: hubot machine <name> has mac <mac>)"
-    else 
-      machineReply = "#{machineReply}\n `#{mac}` | #{machine}" for machine, mac of machineList
-      
-      msg.reply machineReply
+		if isValidMac mac
+			machineList[machine] = mac
+			robot.brain.set "wakeup", machineList
 
-
-  #
-  # Delete a machine from memory
-  # 
-  robot.respond /forget machine (.*)/i, (msg) ->
-    machine = msg.match[1]
-    machineList = robot.brain.get('wakeup') or null
-
-    if machineList? && machineList[msg.match[1]]?
-      delete machineList[machine]
-      robot.brain.set "wakeup", machineList
-      msg.reply "erased #{machine} from my memory"
-    else
-      msg.reply "I don't know a machine called #{machine}"
+			msg.reply "got it, #{machine} has mac address #{mac}"
+		else
+			msg.reply "hmzz.. #{mac} is not a valid mac address"
 
 
-  #
-  # Send a WOL package
-  # 
-  robot.respond /kick (.*)/i, (msg) ->
-    machineList = robot.brain.get('wakeup') or null
+	#
+	# Show a list of all machines I know
+	# 
+	robot.respond /show (?:the )?machine list|show machines/i, (msg) ->
+		machineList = robot.brain.get('wakeup') or null
 
-    # Is it a machine we know?
-    if machineList? && machineList[msg.match[1]]?
-      mac = machineList[msg.match[1]]
-    else 
-      mac = msg.match[1]
+		machineReply = ""
 
-    if isValidMac mac
+		if machineList == null
+			msg.reply "I don't know any machines... (hint: hubot machine <name> has mac <mac>)"
+		else 
+			machineReply = "#{machineReply}\n `#{mac}` | #{machine}" for machine, mac of machineList
+			
+			msg.reply machineReply
 
-      # This is the magical line, that sends the packages
-      wol.wake mac, (error) ->
-        if error
-          msg.reply "shoot! #{error}"
-        else 
-          msg.reply "kicked #{mac} his shiny metal ass"
-    else
-      msg.reply "#{mac} is not a mac adres, nor a machine I know"
-      return
+
+	#
+	# Delete a machine from memory
+	# 
+	robot.respond /forget machine (.*)/i, (msg) ->
+		machine = msg.match[1]
+		machineList = robot.brain.get('wakeup') or null
+
+		if machineList? && machineList[msg.match[1]]?
+			delete machineList[machine]
+			robot.brain.set "wakeup", machineList
+			msg.reply "erased #{machine} from my memory"
+		else
+			msg.reply "I don't know a machine called #{machine}"
+
+
+	#
+	# Send a WOL package
+	# 
+	robot.respond /kick (.*)/i, (msg) ->
+		machineList = robot.brain.get('wakeup') or null
+
+		# Is it a machine we know?
+		if machineList? && machineList[msg.match[1]]?
+			mac = machineList[msg.match[1]]
+		else 
+			mac = msg.match[1]
+
+		if isValidMac mac
+
+			# This is the magical line, that sends the packages
+			wol.wake mac, (error) ->
+				if error
+					msg.reply "shoot! #{error}"
+				else 
+					msg.reply "kicked #{mac} his shiny metal ass"
+		else
+			msg.reply "#{mac} is not a mac adres, nor a machine I know"
+			return
 
 

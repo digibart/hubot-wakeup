@@ -1,39 +1,39 @@
 {
-  "name": "hubot-wakeup",
-  "description": "A hubot script that kicks by sending WOL packages",
-  "version": "0.0.2",
-  "author": "Bart <bart@pixelbak.nl>",
-  "license": "MIT",
-  "keywords": [
-    "hubot",
-    "hubot-scripts",
-    "wake_on_lan"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/digibart/hubot-wakeup.git"
-  },
-  "bugs": {
-    "url": "https://github.com/digibart/hubot-wakeup/issues"
-  },
-  "dependencies": {
-    "coffee-script": "~1.6",
-    "wake_on_lan": "0.0.3"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-jasmine-node": "~0.2.1",
-    "grunt-release": "~0.7.0",
-    "hubot": "~2.7.3",
-    "hubot-mock-adapter": "~1.0.0",
-    "jasmine-node": "~1.14.3",
-    "load-grunt-tasks": "~0.4.0",
-    "matchdep": "~0.1.2",
-    "grunt-conventional-changelog": "~1.1.0"
-  },
-  "main": "index.coffee",
-  "scripts": {
-    "test": "node_modules/.bin/jasmine-node --coffee --color --verbose test/"
-  }
+    "name": "hubot-wakeup",
+    "description": "A hubot script that kicks by sending WOL packages",
+    "version": "0.0.2",
+    "author": "Bart <bart@pixelbak.nl>",
+    "license": "MIT",
+    "keywords": [
+        "hubot",
+        "hubot-scripts",
+        "wake_on_lan"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/digibart/hubot-wakeup.git"
+    },
+    "bugs": {
+        "url": "https://github.com/digibart/hubot-wakeup/issues"
+    },
+    "dependencies": {
+        "coffee-script": "~1.6",
+        "wake_on_lan": "0.0.3"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-contrib-watch": "~0.5.3",
+        "grunt-jasmine-node": "~0.2.1",
+        "grunt-release": "~0.7.0",
+        "hubot": "~2.7.3",
+        "hubot-mock-adapter": "~1.0.0",
+        "jasmine-node": "~1.14.3",
+        "load-grunt-tasks": "~0.4.0",
+        "matchdep": "~0.1.2",
+        "grunt-conventional-changelog": "~1.1.0"
+    },
+    "main": "index.coffee",
+    "scripts": {
+        "test": "node_modules/.bin/jasmine-node --coffee --color --verbose test/"
+    }
 }
