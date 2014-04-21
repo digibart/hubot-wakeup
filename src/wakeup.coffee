@@ -2,7 +2,7 @@
 #   A hubot script that kicks by sending WOL packages
 #
 # Configuration:
-#   None
+#   HUBOT_WAKEUP_HTTP_ENABLED - trigger wakeup with a http request?
 #
 # Commands:
 #   hubot kick <machine> - Send a WOL package to `<machine>`
@@ -10,6 +10,9 @@
 #   hubot forget machine <name> - remove a machine from memory
 #   hubot show machines - returns a list of machines with their mac adres
 #
+# URLs:
+# 	GET /wakeup/kick/:machine - wakes up <machine>
+# 	
 # Notes:
 #   None
 #
@@ -56,8 +59,10 @@ module.exports = (robot) ->
 				else
 					msg.reply "kicked #{mac} his shiny metal ass"
 		else
-			msg.reply "#{mac} is not a mac adres, nor a machine I know"
+			msg.reply "'#{mac}' is not a mac adres, nor a machine I know"
 			return
+
+			
 	#
 	# Remember a machine's mac address
 	# 
@@ -112,4 +117,17 @@ module.exports = (robot) ->
 	# 
 	robot.respond /kick (.*)/i, (msg) ->
 		wakeup msg.match[1], msg
+		
+
+	#
+	# Listen to GET http requests
+	# 
+	robot.router.get '/wakeup/kick/:mac', (req, res) ->
+		enabled = process.env.HUBOT_WAKEUP_HTTP_ENABLED
+
+		if enabled
+			mac = req.params.mac
+			res.reply = res.end
+			wakeup mac, res
+
 
