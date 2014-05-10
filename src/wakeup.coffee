@@ -3,6 +3,7 @@
 #
 # Configuration:
 #   HUBOT_WAKEUP_HTTP_ENABLED - trigger wakeup with a http request? ( 1|0 )
+#   HUBOT_WAKEUP_CHANNEL - the room/channel to send messages to
 #
 # Commands:
 #   hubot kick <machine> - Send a WOL package to `<machine>`
@@ -40,9 +41,8 @@ module.exports = (robot) ->
 	#
 	# Send the package
 	#
-	wakeup = (machine, msg) ->
+	wakeup = (machine, callback) ->
 		machineList = robot.brain.get('wakeup') or null
-		msg = msg or reply : ->
 
 		# Is it a machine we know?
 		if machineList? && machineList[machine]?
@@ -55,11 +55,11 @@ module.exports = (robot) ->
 			# This is the magical line, that sends the packages
 			wol.wake mac, (error) ->
 				if error
-					msg.reply "shoot! #{error}"
+					callback "shoot! #{error}"
 				else
-					msg.reply "kicked #{mac} his shiny metal ass"
+					callback "kicked #{mac} his shiny metal ass"
 		else
-			msg.reply "'#{mac}' is not a mac adres, nor a machine I know"
+			callback "'#{mac}' is not a mac adres, nor a machine I know"
 			return
 
 			
@@ -116,19 +116,24 @@ module.exports = (robot) ->
 	# Send a WOL package
 	# 
 	robot.respond /kick (.*)/i, (msg) ->
-		wakeup msg.match[1], msg
+		wakeup msg.match[1], (message) ->
+			msg.reply message
 		
 
 	#
 	# Listen to GET http requests
 	# 
 	robot.router.get '/wakeup/kick/:mac', (req, res) ->
-		enabled = process.env.HUBOT_WAKEUP_HTTP_ENABLED
+		enabled = process.env.HUBOT_WAKEUP_HTTP_ENABLED	 
 
 		if enabled == "true" or enabled == "1"
 			mac = req.params.mac
-			res.reply = res.end
-			wakeup mac, res
+			channel = process.env.HUBOT_WAKEUP_CHANNEL or "#general"
+
+			wakeup mac, (message) ->
+				robot.send {room: channel}, message
+				res.end message
+				return
 		else
 			res.end "http disabled"
 
