@@ -2,7 +2,7 @@
 #   A hubot script that kicks by sending WOL packages
 #
 # Configuration:
-#   HUBOT_WAKEUP_HTTP_ENABLED - trigger wakeup with a http request?
+#   HUBOT_WAKEUP_HTTP_ENABLED - trigger wakeup with a http request? ( 1|0 )
 #
 # Commands:
 #   hubot kick <machine> - Send a WOL package to `<machine>`
@@ -125,9 +125,11 @@ module.exports = (robot) ->
 	robot.router.get '/wakeup/kick/:mac', (req, res) ->
 		enabled = process.env.HUBOT_WAKEUP_HTTP_ENABLED
 
-		if enabled
+		if enabled == "true" or enabled == "1"
 			mac = req.params.mac
 			res.reply = res.end
 			wakeup mac, res
+		else
+			res.end "http disabled"
 
 
